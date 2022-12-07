@@ -1,0 +1,61 @@
+body {
+    font: 10px sans-serif;
+}
+
+.linage {
+    fill: none;
+    stroke: #000;
+}
+
+.marriage {
+    fill: none;
+    stroke: black;
+}
+
+.marriageNode {
+    background-color: black;
+    border-radius: 50%;
+}
+
+/* .male::before,
+.female::before {
+    content: " ";
+    position: absolute;
+    z-index: -1;
+    top: 2px;
+    left: 2px;
+    right: 2px;
+    bottom: 2px;
+    border: 2px solid red;
+} */
+
+.male,
+.female {
+    border: solid 1px white;
+}
+
+.male {
+    background-color: lightblue;
+
+    box-sizing: border-box;
+}
+
+.female {
+    background-color: pink;
+    box-sizing: border-box;
+}
+
+.emphasis {
+    font-style: italic;
+}
+
+p {
+    padding: 0;
+    margin: 0;
+}
+
+svg {
+    border-style: solid;
+    border-width: 1px;
+    background: white;
+}

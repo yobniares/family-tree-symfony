@@ -1,0 +1,69 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+
+	<link href="{{ asset('css/map/map.css') }}" rel="stylesheet"/>
+
+	<div id="graph"></div>
+
+{% endblock %}
+
+{% block custom_javascripts %}
+	<script src="https://cdn.jsdelivr.net/lodash/4.17.4/lodash.min.js"></script>
+	<script src="https://d3js.org/d3.v4.min.js"></script>
+	<script src="{{ asset('js/map/dTree.min.js') }}"></script>
+
+	<script>
+		var data = []
+treeJson = d3.json("{{ path('get_map_data') }}", function (error, treeData) {
+
+if (error) 
+alert(error);
+
+
+
+tree = dTree.init(treeData, {
+target: "#graph",
+debug: false,
+hideMarriageNodes: false,
+marriageNodeSize: 5,
+height: 800,
+width: 1200,
+margin: {
+top: 10,
+right: 10,
+bottom: 10,
+left: 10
+},
+callbacks: {
+nodeClick: function (name, extra) {
+alert('Click: ' + name);
+},
+nodeRightClick: function (name, extra) {
+alert('Right-click: ' + name);
+},
+textRenderer: function (name, extra, textClass) {
+if (extra && extra.nickname) 
+name = name + " (" + extra.nickname + ")";
+
+
+
+return "<p align='center' class='" + textClass + "'>" + name + "</p>";
+},
+marriageClick: function (extra, id) {
+alert('Clicked marriage node' + id);
+},
+marriageRightClick: function (extra, id) {
+alert('Right-clicked marriage node' + id);
+}
+}
+});
+
+// tree.zoomTo(0, 10, 2, duration = 500);
+
+
+});
+	</script>
+
+{% endblock %}

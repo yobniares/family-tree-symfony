@@ -1,0 +1,105 @@
+{% extends "base.html.twig" %}
+{% block
+title %}Список
+{% endblock %}
+
+{% block head_title %}Список всех
+{% endblock %}
+
+{% block body %}
+	<div class="container mx-3">
+		<table id="dtBasicExample" class="table table-striped table-bordered table-sm">
+
+			<thead>
+				<tr>
+					<th scope="col">#</th>
+					<th scope="col">Имя</th>
+					<th scope="col">Фамилия</th>
+					<th scope="col">Отчество</th>
+					<th scope="col">Пол</th>
+
+					<th scope="col">Девичья фамилия</th>
+					<th scope="col">Дата рождения</th>
+					<th scope="col">Мать</th>
+					<th scope="col">Отец</th>
+					<th scope="col">Подробнее</th>
+
+
+				</tr>
+			</thead>
+			<tbody>
+				{% for human in objects %}
+					<tr>
+						<th scope="row">{{ human.id }}</th>
+						<td>{{human.firstname}}</td>
+						<td>{{human.lastname}}</td>
+						<td>{{human.middlename}}</td>
+						<td>{{human.gender}}</td>
+
+						<td>{{human.maidenname}}</td>
+						<td>{{human.getDayBirth ~ "." ~ human.getMonthBirth ~ "." ~ human.getYearBirth}}</td>
+
+
+						<td>{{human.getMother ? human.getMother.getFullname : ''}}</td>
+
+
+						<td>{{human.getFather ? human.getFather.getFullname : ''}}</td>
+
+
+						<td>
+							<div class=" dropdown">
+								<a class="btn btn-primary dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+									Действия
+								</a>
+								<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+									<a class="dropdown-item" target="_blank" href="{{ asset('uploads/pictures/' ~ human.picture) }}">Фото</a>
+
+									{% if is_granted('ROLE_USER') %}
+
+										<a class="dropdown-item" href="{{ path('edit_human', {id:human.id}) }}">Редактировать</a>
+										<a class="dropdown-item" href="{{ path('delete_human',{id:human.id}) }}">Удалить</a>
+
+
+									{% endif %}
+
+
+									{# <div class="dropdown-divider"></div> #}
+								</div>
+							</div>
+						</td>
+
+
+					</tr>
+
+				{% endfor %}
+
+
+			</tbody>
+		</table>
+
+		{% if is_granted('ROLE_USER') %}
+			<a class="btn btn-primary align-center" href="{{ path('new_human') }}">
+
+				Создать нового
+			</a>
+
+
+		{% endif %}
+
+
+	</div>
+
+
+{% endblock %}
+
+{% block custom_javascripts %}
+	<script>
+		$(document).ready(function () {
+$('#dtBasicExample').DataTable();
+$('.dataTables_length').addClass('bs-select');
+});
+	</script>
+
+{% endblock %}
