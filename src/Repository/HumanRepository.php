@@ -25,7 +25,8 @@ class HumanRepository extends ServiceEntityRepository
     {
         $this->getEntityManager()->persist($entity);
 
-        if ($flush) {
+        if ($flush)
+        {
             $this->getEntityManager()->flush();
         }
     }
@@ -34,7 +35,8 @@ class HumanRepository extends ServiceEntityRepository
     {
         $this->getEntityManager()->remove($entity);
 
-        if ($flush) {
+        if ($flush)
+        {
             $this->getEntityManager()->flush();
         }
     }
@@ -53,14 +55,28 @@ class HumanRepository extends ServiceEntityRepository
             ;
     }
 
-    public function findOldest(): ? Human
+    /**
+     * @return Human[] Returns an array of Human objects
+     */
+    public function findOldestInTreeIncluding(Human $human): ?array
     {
-        return $this->createQueryBuilder('h')
-            ->orderBy('h.year_birth', 'ASC')
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult()
-            ;
+        $return = [];
+        $mother = $human->getMother();
+        $father = $human->getFather();
+        if ($mother == null && $father == null)
+        {
+            return [$human];
+        }
+        if ($father != null)
+        {
+            $return = array_merge($return, $this->findOldestInTreeIncluding($father));
+        }
+        if ($mother != null)
+        {
+            $return = array_merge($return, $this->findOldestInTreeIncluding($mother));
+        }
+        return $return;
+
     }
 
     public function findSpouse(Human $human): ? Human
@@ -74,6 +90,8 @@ class HumanRepository extends ServiceEntityRepository
             ->getOneOrNullResult()
             ;
     }
+
+
 
 
 

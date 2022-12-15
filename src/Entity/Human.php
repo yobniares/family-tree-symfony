@@ -51,13 +51,13 @@ class Human
     private ?\DateTimeInterface $datetime_updated = null;
 
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
-    private ?self $mother = null;
+    private ? self$mother = null;
 
     #[ORM\OneToMany(mappedBy: 'mother', targetEntity: self::class)]
     private Collection $children;
 
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
-    private ?self $father = null;
+    private ? self$father = null;
 
     #[ORM\Column(nullable: true)]
     private ?int $year_death = null;
@@ -116,7 +116,7 @@ class Human
 
     public function getFullname(): ?string
     {
-return $this->lastname. ' '. $this->firstname. ' '. $this->middlename . ' '. $this->year_birth;
+        return $this->lastname . ' ' . $this->firstname . ' ' . $this->middlename . ' ' . $this->year_birth;
 
     }
 
@@ -137,9 +137,20 @@ return $this->lastname. ' '. $this->firstname. ' '. $this->middlename . ' '. $th
         return $this->gender;
     }
 
+    public function getOppositeGender(): ?string
+    {
+        return $this->gender == "male" ? 'female' : 'male';
+    }
+
+    public function getRuGender(): ?string
+    {
+        return $this->gender == "male" ? 'Муж' : 'Жен';
+    }
+
     public function setGender(string $gender): self
     {
-        if($gender!='male' && $gender!='female'){
+        if ($gender != 'male' && $gender != 'female')
+        {
             throw new InvalidArgumentException('Gender field must be \'male\' or \'female\'');
         }
         $this->gender = $gender;
@@ -219,19 +230,20 @@ return $this->lastname. ' '. $this->firstname. ' '. $this->middlename . ' '. $th
         return $this;
     }
 
-    public function getMother(): ?self
+    public function getMother(): ? self
     {
         return $this->mother;
     }
 
-    public function setMother(?self $mother): self
+    public function setMother(? self$mother): self
     {
-        if($mother==null){
+        if ($mother == null)
+        {
             $this->mother = $mother;
             return $this;
         }
-        if($mother->getGender()=='female' && $this!=$mother)
-        $this->mother = $mother;
+        if ($mother->getGender() == 'female' && $this != $mother)
+            $this->mother = $mother;
 
         return $this;
     }
@@ -244,28 +256,32 @@ return $this->lastname. ' '. $this->firstname. ' '. $this->middlename . ' '. $th
         return $this->children;
     }
 
-    public function addChild(self $child): self
+    public function addChild(self$child): self
     {
-        if (!$this->children->contains($child)) {
-            
+        if (!$this->children->contains($child))
+        {
+
             $this->children->add($child);
-            if($this->getGender()=='male')
-            $child->setFather($this);
+            if ($this->getGender() == 'male')
+                $child->setFather($this);
             else
-            $child->setMother($this);
+                $child->setMother($this);
         }
 
         return $this;
     }
 
-    public function removeChild(self $child): self
+    public function removeChild(self$child): self
     {
-        if ($this->children->removeElement($child)) {
+        if ($this->children->removeElement($child))
+        {
             // set the owning side to null (unless already changed)
-            if ($child->getMother() === $this) {
+            if ($child->getMother() === $this)
+            {
                 $child->setMother(null);
             }
-            if ($child->getFather() === $this) {
+            if ($child->getFather() === $this)
+            {
                 $child->setFather(null);
             }
         }
@@ -273,27 +289,28 @@ return $this->lastname. ' '. $this->firstname. ' '. $this->middlename . ' '. $th
         return $this;
     }
 
-    public function getFather(): ?self
+    public function getFather(): ? self
     {
         return $this->father;
     }
 
-    public function setFather(?self $father): self
+    public function setFather(? self$father): self
     {
-        if($father==null){
+        if ($father == null)
+        {
             $this->father = $father;
             return $this;
         }
-        if($father->getGender()=='male' && $this!=$father)
-        $this->father = $father;
+        if ($father->getGender() == 'male' && $this != $father)
+            $this->father = $father;
 
         return $this;
     }
 
-    public function __toString() 
-{
-    return (string) $this->id; 
-}
+    public function __toString()
+    {
+        return (string)$this->id;
+    }
 
     public function getYearDeath(): ?int
     {
@@ -331,6 +348,3 @@ return $this->lastname. ' '. $this->firstname. ' '. $this->middlename . ' '. $th
         return $this;
     }
 }
-
-
-

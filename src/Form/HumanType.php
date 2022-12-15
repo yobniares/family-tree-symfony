@@ -81,21 +81,24 @@ class HumanType extends AbstractType
                 'class' => Human::class,
                 'placeholder' => 'Не выбрано',
                 'required' => false,
-                'query_builder' => function (HumanRepository $er) use ($currentHuman) {
+                'query_builder' => function (HumanRepository $er) use ($currentHuman)
+                {
                     return $er->createQueryBuilder('u')
                         ->where('u.gender = \'female\'')
                         ->andWhere('u.id != :humanid', )
-                        ->andWhere('u.year_birth < :human_year')
+                        ->andWhere('( COALESCE(u.year_birth,0) < :human_year)')
                         ->setParameter('humanid', ($currentHuman ? $currentHuman->getId() : 0))
                         ->setParameter('human_year', ($currentHuman ? $currentHuman->getYearBirth() : 9999))
                         ->orderBy('u.firstname', 'ASC');
                 },
-                'choice_label' => function (? Human $human) {
+                'choice_label' => function (? Human $human)
+                {
                     return $human ? $human->getFullname() : 'не выбрано';
 
 
                 },
-                'choice_value' => function (? Human $entity) {
+                'choice_value' => function (? Human $entity)
+                {
                     return $entity ? $entity->getId() : '';
                 },
             ])
@@ -104,22 +107,26 @@ class HumanType extends AbstractType
                 'required' => false,
                 'class' => Human::class,
                 'placeholder' => 'Не выбрано',
-                'query_builder' => function (HumanRepository $er) use ($currentHuman) {
+                'query_builder' => function (HumanRepository $er) use ($currentHuman)
+                {
 
                     return $er->createQueryBuilder('u')
                         ->where('u.gender = \'male\'')
                         ->andWhere('u.id != :humanid', )
-                        ->andWhere('u.year_birth < :human_year')
+                    ->andWhere('COALESCE(u.year_birth,0) < :human_year')
+
                         ->setParameter('humanid', ($currentHuman ? $currentHuman->getId() : 0))
                         ->setParameter('human_year', ($currentHuman ? $currentHuman->getYearBirth() : 9999))
 
                         ->orderBy('u.lastname', 'ASC');
                 },
-                'choice_label' => function ($human) {
+                'choice_label' => function ($human)
+                {
                     return $human ? $human->getFullname() : 'не выбрано';
 
                 },
-                'choice_value' => function (? Human $entity) {
+                'choice_value' => function (? Human $entity)
+                {
                     return $entity ? $entity->getId() : '';
                 },
             ])
@@ -135,6 +142,7 @@ class HumanType extends AbstractType
         $resolver->setAllowedTypes('currentHuman', ['null', Human::class]);
 
     }
+
 
 
 

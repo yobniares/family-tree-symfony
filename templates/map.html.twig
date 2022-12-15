@@ -16,7 +16,7 @@
 
 	<script>
 		var data = []
-treeJson = d3.json("{{ path('get_map_data') }}", function (error, treeData) {
+treeJson = d3.json("{{ path('get_map_data',{id:human.getId}) }}", function (error, treeData) {
 
 if (error) 
 alert(error);
@@ -38,17 +38,16 @@ left: 10
 },
 callbacks: {
 nodeClick: function (name, extra) {
-alert('Click: ' + name);
+if (extra && extra.id) 
+window.location.href = "/human/" + extra.id;
+
+
+
 },
 nodeRightClick: function (name, extra) {
 alert('Right-click: ' + name);
 },
 textRenderer: function (name, extra, textClass) {
-if (extra && extra.nickname) 
-name = name + " (" + extra.nickname + ")";
-
-
-
 return "<p align='center' class='" + textClass + "'>" + name + "</p>";
 },
 marriageClick: function (extra, id) {

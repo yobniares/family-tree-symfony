@@ -16,6 +16,8 @@ title %}Список
 					<th scope="col">Имя</th>
 					<th scope="col">Фамилия</th>
 					<th scope="col">Отчество</th>
+					<th scope="col">Фото</th>
+
 					<th scope="col">Пол</th>
 
 					<th scope="col">Девичья фамилия</th>
@@ -31,19 +33,55 @@ title %}Список
 				{% for human in objects %}
 					<tr>
 						<th scope="row">{{ human.id }}</th>
-						<td>{{human.firstname}}</td>
+						<td>
+							<a href="{{path('human_profile',{id:human.id})}}">
+
+
+								{{human.firstname}}
+
+							</a>
+						</td>
+
 						<td>{{human.lastname}}</td>
 						<td>{{human.middlename}}</td>
-						<td>{{human.gender}}</td>
+						<td>
+							<button class="btn btn-outline" rel="popover" img="{{ asset('uploads/pictures/' ~ human.picture) }}">Фото</button>
+						</td>
+
+
+						<td>{{human.getRuGender}}</td>
+
 
 						<td>{{human.maidenname}}</td>
 						<td>{{human.getDayBirth ~ "." ~ human.getMonthBirth ~ "." ~ human.getYearBirth}}</td>
 
 
-						<td>{{human.getMother ? human.getMother.getFullname : ''}}</td>
+						<td>
+
+							{% if human.getMother %}
+
+								<a href="{{path('human_profile',{id:human.getMother.id})}}">{{human.getMother.getFullname}}</a>
 
 
-						<td>{{human.getFather ? human.getFather.getFullname : ''}}</td>
+							{% endif %}
+
+
+						</td>
+
+
+						<td>
+							{% if human.getFather %}
+
+								<a href="{{path('human_profile',{id:human.getFather.id})}}">
+
+
+									{{human.getFather.getFullname}}
+
+								</a>
+
+
+							{% endif %}
+						</td>
 
 
 						<td>
@@ -99,6 +137,15 @@ title %}Список
 		$(document).ready(function () {
 $('#dtBasicExample').DataTable();
 $('.dataTables_length').addClass('bs-select');
+});
+
+$('button[rel=popover]').popover({
+html: true,
+trigger: 'click',
+placement: 'bottom',
+content: function () {
+return '<img width="100%" src="' + $(this).attr('img') + '" />';
+}
 });
 	</script>
 

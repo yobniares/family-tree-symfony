@@ -15,17 +15,13 @@ treeJson = d3.json("https://raw.githubusercontent.com/ErikGartner/dTree/master/t
         },
         callbacks: {
             nodeClick: function (name, extra) {
-                alert('Click: ' + name);
+                if (extra && extra.id)
+                    window.location.href = "/human/" + extra.id;
             },
             nodeRightClick: function (name, extra) {
                 alert('Right-click: ' + name);
             },
             textRenderer: function (name, extra, textClass) {
-                if (extra && extra.nickname)
-                    name = name + " (" + extra.nickname + ")";
-
-
-
                 return "<p align='center' class='" + textClass + "'>" + name + "</p>";
             },
             marriageClick: function (extra, id) {
